@@ -70,7 +70,7 @@ class BasicAuth(Auth):
             return None
 
         user_search_list = User.search({'email': user_email})
-        if not user_search_list:
+        if user_search_list == []:
             return None
 
         user: User = user_search_list[0]
