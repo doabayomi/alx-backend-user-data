@@ -5,10 +5,13 @@ Route module for the API
 from os import getenv
 import os
 from api.v1.views import app_views
+
 from flask import Flask, jsonify, abort, request
 from flask_cors import (CORS, cross_origin)
+
 from api.v1.auth.auth import Auth
 from api.v1.auth.basic_auth import BasicAuth
+from api.v1.auth.session_auth import SessionAuth
 
 
 app = Flask(__name__)
@@ -20,6 +23,8 @@ if auth == 'auth':
     auth = Auth()
 elif auth == 'basic_auth':
     auth = BasicAuth()
+elif auth == 'session_auth':
+    auth = SessionAuth()
 
 
 @app.before_request
