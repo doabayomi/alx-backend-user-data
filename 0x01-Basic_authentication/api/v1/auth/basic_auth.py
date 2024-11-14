@@ -18,11 +18,11 @@ class BasicAuth(Auth):
                                             authorization_header: str) -> str:
         """Extracts the base64 part of the Authorization header
         """
-        header_starts_with_basic = authorization_header.startswith('Basic ')
-
         if authorization_header is None or \
                 type(authorization_header) is not str:
             return None
+
+        header_starts_with_basic = authorization_header.startswith('Basic ')
         if not header_starts_with_basic:
             return None
         return authorization_header[6:]
@@ -70,7 +70,7 @@ class BasicAuth(Auth):
             return None
 
         user_search_list = User.search({'email': user_email})
-        if len(user_search_list) <= 0:
+        if not user_search_list or len(user_search_list) == 0:
             return None
 
         user: User = user_search_list[0]
