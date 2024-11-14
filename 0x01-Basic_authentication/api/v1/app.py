@@ -15,7 +15,7 @@ app = Flask(__name__)
 app.register_blueprint(app_views)
 CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 
-auth = getenv('AUTH_TYPE')
+auth = getenv('AUTH_TYPE', 'auth')
 if auth == 'auth':
     auth = Auth()
 elif auth == 'basic_auth':
@@ -23,7 +23,9 @@ elif auth == 'basic_auth':
 
 
 @app.before_request
-def authenticate() -> None:
+def authenticate():
+    """Before page request function for authentication
+    """
     if auth is None:
         return
 
