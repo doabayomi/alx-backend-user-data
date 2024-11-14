@@ -6,16 +6,16 @@ from os import getenv
 from api.v1.views import app_views
 from flask import Flask, jsonify, abort, request
 from flask_cors import (CORS, cross_origin)
+import os
 from api.v1.auth.auth import Auth
 from api.v1.auth.basic_auth import BasicAuth
-import os
 
 
 app = Flask(__name__)
 app.register_blueprint(app_views)
 CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
-
 auth = getenv('AUTH_TYPE', 'auth')
+auth = None
 if auth == 'auth':
     auth = Auth()
 elif auth == 'basic_auth':
@@ -26,19 +26,17 @@ elif auth == 'basic_auth':
 def authenticate():
     """Before page request function for authentication
     """
-    if auth is None:
-        return
-
-    excluded_paths = ['/api/v1/status/',
-                      '/api/v1/unauthorized/', '/api/v1/forbidden/']
-    if auth.require_auth(request.path, excluded_paths):
-        return
-
-    if auth.authorization_header(request) is None:
-        abort(401)
-
-    if auth.current_user(request) is None:
-        abort(403)
+    if auth:
+        excluded_paths = [
+            '/api/v1/status/',
+            '/api/v1/unauthorized/',
+            '/api/v1/forbidden/'
+        ]
+        if auth.require_auth(request.path, excluded_paths):
+            if auth.authorization_header(request) is None:
+                abort(401)
+            if auth.current_user(request) is None:
+                abort(403)
 
 
 @app.errorhandler(404)
@@ -57,7 +55,7 @@ def unauthorized(error) -> str:
 
 @app.errorhandler(403)
 def forbidden(error) -> str:
-    """Forbidden request handler
+    """Forbidden handler
     """
     return jsonify({"error": "Forbidden"}), 403
 
