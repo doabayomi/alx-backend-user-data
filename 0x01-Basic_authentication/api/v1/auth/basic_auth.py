@@ -12,17 +12,19 @@ class BasicAuth(Auth):
     """Basic Authentication object
 
     Args:
-        Auth: Base Authentication object
+        Auth: Base Authentication object.
     """
     def extract_base64_authorization_header(self,
                                             authorization_header: str) -> str:
         """Extracts the base64 part of the Authorization header
         """
         header_is_None = authorization_header is None
-        header_not_str = type(authorization_header) != str
+        header_not_str = type(authorization_header) is not str
         header_starts_with_basic = authorization_header.startswith('Basic ')
 
-        if header_is_None or header_not_str or not header_starts_with_basic:
+        if header_is_None or header_not_str:
+            return None
+        if not header_starts_with_basic:
             return None
         return authorization_header[6:]
 
