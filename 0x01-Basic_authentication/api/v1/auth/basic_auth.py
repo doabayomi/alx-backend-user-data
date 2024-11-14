@@ -18,11 +18,11 @@ class BasicAuth(Auth):
                                             authorization_header: str) -> str:
         """Extracts the base64 part of the Authorization header
         """
-        header_is_None = authorization_header is None
-        header_not_str = type(authorization_header) is not str
         header_starts_with_basic = authorization_header.startswith('Basic ')
 
-        if header_is_None or header_not_str:
+        if authorization_header is None:
+            return None
+        if type(authorization_header) is not str:
             return None
         if not header_starts_with_basic:
             return None
