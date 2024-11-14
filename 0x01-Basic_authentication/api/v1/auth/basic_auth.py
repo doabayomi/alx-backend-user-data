@@ -9,6 +9,11 @@ import binascii
 
 
 class BasicAuth(Auth):
+    """Basic Authentication object
+
+    Args:
+        Auth: Base Authentication object
+    """
     def extract_base64_authorization_header(self,
                                             authorization_header: str) -> str:
         """Extracts the base64 part of the Authorization header

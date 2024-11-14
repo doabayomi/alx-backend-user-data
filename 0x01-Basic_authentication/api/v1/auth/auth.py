@@ -6,6 +6,8 @@ from typing import List, TypeVar
 
 
 class Auth():
+    """Base Authentication object
+    """
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """Confirms if route needs authentication
         """
