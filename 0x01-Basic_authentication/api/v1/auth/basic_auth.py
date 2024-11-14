@@ -20,9 +20,8 @@ class BasicAuth(Auth):
         """
         header_starts_with_basic = authorization_header.startswith('Basic ')
 
-        if authorization_header is None:
-            return None
-        if type(authorization_header) is not str:
+        if authorization_header is None or \
+                type(authorization_header) is not str:
             return None
         if not header_starts_with_basic:
             return None
