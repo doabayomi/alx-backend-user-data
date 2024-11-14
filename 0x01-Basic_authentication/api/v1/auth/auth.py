@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+"""Base Authentication Class
+"""
 from flask import request
 from typing import List, TypeVar
 
@@ -24,4 +26,6 @@ class Auth():
         return request.headers.get('Authorization')
 
     def current_user(self, request=None) -> TypeVar('User'):
+        """Returns current user object
+        """
         return None
