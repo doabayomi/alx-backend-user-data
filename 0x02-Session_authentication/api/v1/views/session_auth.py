@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-from flask import request, jsonify, Response
+from flask import request, jsonify, Response, abort
 from api.v1.views import app_views
 from api.v1.auth import auth, session_auth
 from models.user import User
 import os
 
 
-@app_views.route('/auth_session/login', methods=['POST'])
+@app_views.route('/auth_session/login/', methods=['POST'])
 def login():
     email = request.form.get('email')
     password = request.form.get('password')
@@ -32,3 +32,14 @@ def login():
     response.set_cookie(os.getenv('SESSION_NAME'), session_id)
 
     return response
+
+
+@app_views.route('/auth_session/logout/', methods=['DELETE'])
+def logout():
+    app_module = __import__('api.v1.app', fromlist=['auth'])
+    auth: auth.Auth | session_auth.SessionAuth = app_module.auth
+
+    confirmed = auth.destroy_session(request)
+    if not confirmed:
+        abort(404)
+    return jsonify({}), 200
