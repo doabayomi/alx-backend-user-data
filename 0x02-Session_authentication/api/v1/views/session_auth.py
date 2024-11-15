@@ -6,8 +6,14 @@ from models.user import User
 import os
 
 
-@app_views.route('/auth_session/login/', methods=['POST'])
+@app_views.route('/auth_session/login/', methods=['POST'],
+                 strict_slashes=False)
 def login():
+    """POST api/v1/auth_session/login
+
+    Returns:
+        JSON representation of User instance
+    """
     email = request.form.get('email')
     password = request.form.get('password')
 
@@ -34,8 +40,14 @@ def login():
     return response
 
 
-@app_views.route('/auth_session/logout/', methods=['DELETE'])
+@app_views.route('/auth_session/logout/', methods=['DELETE'],
+                 strict_slashes=False)
 def logout():
+    """DELETE api/v1/auth_session/logout
+
+    Returns:
+        An empty JSON object or 404 error
+    """
     app_module = __import__('api.v1.app', fromlist=['auth'])
     auth: auth.Auth | session_auth.SessionAuth = app_module.auth
 
