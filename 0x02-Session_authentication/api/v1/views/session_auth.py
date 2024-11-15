@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+"""Session authentication routes
+"""
 from flask import request, jsonify, Response, abort
 from api.v1.views import app_views
 from api.v1.auth import auth, session_auth
