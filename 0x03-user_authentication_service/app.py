@@ -15,14 +15,16 @@ app = Flask(__name__)
 
 
 @app.route('/')
-def index():
-    """Main page"""
+def index() -> Response:
+    """Main page
+    """
     return jsonify({"message": "Bienvenue"})
 
 
-@app.route("/users", methods=['POST'])
-def users():
-    """POST /users"""
+@app.route("/users", methods=['POST'], strictslashes=False)
+def users() -> Response:
+    """POST /users
+    """
     email = request.form.get("email")
     password = request.form.get("password")
     try:
@@ -32,9 +34,10 @@ def users():
         return jsonify({"message": "email already registered"}), 400
 
 
-@app.route('/sessions', methods=['POST'])
-def login():
-    """POST /sessions"""
+@app.route('/sessions', methods=['POST'], strictslashes=False)
+def login() -> Response:
+    """POST /sessions
+    """
     email = request.form.get("email")
     password = request.form.get("password")
     valid_login = AUTH.valid_login(email, password)
@@ -46,20 +49,22 @@ def login():
     return payload
 
 
-@app.route('/logout', methods=['DELETE'])
-def logout():
-    """DELETE /logout"""
+@app.route('/sessions', methods=['DELETE'], strictslashes=False)
+def logout() -> Response:
+    """DELETE /sessions
+    """
     session_id = request.cookies.get('session_id')
     user = AUTH.get_user_from_session_id(session_id)
     if user:
         AUTH.destroy_session(user.id)
-        redirect(url_for('index'))
+        return redirect(url_for('index'))
     abort(403)
 
 
-@app.route('/profile', methods=['GET'])
-def profile():
-    """GET /profile"""
+@app.route('/profile', methods=['GET'], strictslashes=False)
+def profile() -> Response:
+    """GET /profile
+    """
     session_id = request.cookies.get('session_id')
     user = AUTH.get_user_from_session_id(session_id)
     if user:
@@ -67,9 +72,10 @@ def profile():
     abort(403)
 
 
-@app.route('/reset_password', methods=['POST'])
-def get_reset_password_token():
-    """POST /reset_password"""
+@app.route('/reset_password', methods=['POST'], strictslashes=False)
+def get_reset_password_token() -> Response:
+    """POST /reset_password
+    """
     email = request.form.get("email")
     try:
         token = AUTH.get_reset_password_token(email)
@@ -78,9 +84,10 @@ def get_reset_password_token():
         abort(403)
 
 
-@app.route('/reset_password', methods=['PUT'])
-def update_password():
-    """PUT /reset_password"""
+@app.route('/reset_password', methods=['PUT'], strictslashes=False)
+def update_password() -> Response:
+    """PUT /reset_password
+    """
     email = request.form.get("email")
     reset_token = request.form.get("reset_token")
     new_password = request.form.get("new_password")

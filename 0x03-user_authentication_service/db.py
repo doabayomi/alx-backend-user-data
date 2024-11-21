@@ -42,13 +42,13 @@ class DB:
         self._session.commit()
         return new_user
 
-    def find_user_by(self, **kwargs: Any) -> User:
+    def find_user_by(self, **kwargs) -> User:
         """Finds a user by certain criteria
         """
         user = self._session.query(User).filter_by(**kwargs).one()
         return user
 
-    def update_user(self, user_id: str, **kwargs: Any) -> None:
+    def update_user(self, user_id: str, **kwargs) -> None:
         """Updates a users info
         """
         try:
