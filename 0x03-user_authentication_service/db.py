@@ -60,4 +60,3 @@ class DB:
                 self._session.commit()
         except InvalidRequestError:
             raise ValueError("Failed to update user")
-
